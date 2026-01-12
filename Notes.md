@@ -9,3 +9,7 @@
 - Project 3.5 - Databases and Data Migration (with Alembic)
 - Project 4 - Unit & Integration Testing
 - Project 5 - Full Stack Web App
+
+## Python Refresher
+
+- Variables, comments, string formatting
