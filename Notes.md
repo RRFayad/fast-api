@@ -95,3 +95,17 @@
       else:
           print("Finished inner loop for item:", item)
   ```
+
+#### Dictionaries
+
+- Closer to maps (in JS) - key, value pairs
+- Iterable methods like array;
+  - `for key, value in user_dictionary.items():`
+- Also, they are reference types, e.g.:
+
+  ```python
+      dict1 = {a:1, b:2}
+      dict2 = dict1
+      dict2.pop"a"
+      print(dict1) # {b:2}
+  ```
