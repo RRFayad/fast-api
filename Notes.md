@@ -126,3 +126,15 @@
 ```
 
 - **Obs.:** In another example, it was shown that there is hoisting for functions in python
+
+#### Imports
+
+- We dont need to export from the original file
+  - And we import everything - so it will be `imported_name.function()`
+  - `import __39_2_grade_avg_service as grade_service`
+
+- Python comes with some standard libraries, like `random`and `math`
+
+#### Obs during the course / tests:
+
+- In python the fallback has the same idea as in TS: `(len(homework_grades) or 1)`
