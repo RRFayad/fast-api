@@ -109,3 +109,5 @@
       dict2.pop"a"
       print(dict1) # {b:2}
   ```
+
+- **Obs.:** Remember to use `.copy()` to copy the dict instead of pointing to the same when assigning a new dictionary
