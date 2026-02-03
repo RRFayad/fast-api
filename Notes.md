@@ -111,3 +111,18 @@
   ```
 
 - **Obs.:** Remember to use `.copy()` to copy the dict instead of pointing to the same when assigning a new dictionary
+
+#### Functions
+
+- In python, I can explicitly set the args used by name. e.g:
+
+```python
+  def custom_print_numbers(first_num, second_num):
+    print(first_num, second_num)
+
+
+  custom_print_numbers(4, 3)  #prints 4, 3
+  custom_print_numbers(second_num=4, first_num=3) #prints 3, 4
+```
+
+- **Obs.:** In another example, it was shown that there is hoisting for functions in python
