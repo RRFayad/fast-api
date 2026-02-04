@@ -135,6 +135,39 @@
 
 - Python comes with some standard libraries, like `random`and `math`
 
+#### OOP (I just started skimming everything)
+
+- Showed about creaintg classes (very readable syntax)
+  - **Obs.:** We use `self` to refer to the instanciated object
+    - e.g.- class with constructor with args
+
+    ```python
+          class Person():
+            def __init__(self, age=20, name="John"):
+              self.age = age
+              self.name = name
+              self.__arms_qty = 2
+
+            def talk(self):
+              print(f"Hi, I am {self.name}, {self.age} years old")
+
+          p1 = Person(30, "Alice")
+          p1.talk()
+    ```
+
+    - Also we dont need the `__init__` when the constructor has no parameters
+
+- 4 Pilars
+  - Abstraction
+    - "Hide implementation and only show whats is necessary" - Basically creating the class
+  - Encapsulation
+    - Make some properties private
+      - Like the `self.__arms_qty = 2` in our example
+      - **Important:** So we need to create getters and setters to handle the private data
+
+  - Inheritance
+  - Polimorphism
+
 #### Obs during the course / tests:
 
 - In python the fallback has the same idea as in TS: `(len(homework_grades) or 1)`
