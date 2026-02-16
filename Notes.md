@@ -164,9 +164,36 @@
     - Make some properties private
       - Like the `self.__arms_qty = 2` in our example
       - **Important:** So we need to create getters and setters to handle the private data
-
   - Inheritance
+    - Inheriting props from a higher hierarchycal class
+      - `class Dog(Animal)`
+
+    - self vs super
+      - self is the instantiaded object
+      - super() is about the parent
+        - e.g.: `super().__init__(eat, sleep)`
+
   - Polimorphism
+    - Which is basically have different forms
+      - So if we are creating a parent class Animal, each child class has `talk(self)` method, like bark, roar, etc, this is the concept of polymorphism
+
+- Compositions
+  - Creating classes using otther classes, being a **HAS-A** relationship
+    - E.g.:
+
+      ```python
+      class Engine():
+      def start(self):
+      print("Engine started")
+
+      class Motorcycle():
+      def **init**(self):
+      self.engine = Engine()
+
+          def start(self):
+              self.engine.start()
+              print("Motorcycle started")
+      ```
 
 #### Obs during the course / tests:
 
