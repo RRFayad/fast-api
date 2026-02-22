@@ -12,7 +12,13 @@
 - mkdir fastapi
   - cd fastapi
   - python3 -m venv fastapienv
-  - source fastapienv/bin/activate
+  - We need to activate it: source fastapienv/bin/activate
     - we can simply type deactivate
   - pip inmstall fastapi
 - pip install "uvicorn[standard]"
+
+#### Run Server
+
+source .venv/bin/activate
+python -m uvicorn books:app --reload
+url: http://127.0.0.1:8000/...
