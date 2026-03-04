@@ -1,4 +1,5 @@
 from fastapi import Body, FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -10,12 +11,20 @@ class Book:
     description: str
     rating: int
 
-    def __init__(self, id: int, title: str, author: str, description: str, rating: int = None):
+    def __init__(self, id: int, title: str, author: str, description: str, rating: int):
         self.id = id
         self.title = title
         self.author = author
         self.description = description
         self.rating = rating
+
+
+class BookRequest(BaseModel):
+    id: int
+    title: str
+    author: str
+    description: str
+    rating: int
 
 
 BOOKS = [
@@ -36,7 +45,11 @@ def read_all_books():
 
 
 @app.post("/books")
-def create_book(book_req=Body()):
+def create_book(book_req: BookRequest):
+    # print(book_req ). # It shows that book_req is an instance of BookRequest;
 
-    BOOKS.append(book_req)
-    return {"Added:": book_req}
+    # ** unpack and pack key values, so new_book["id"] = book_req["id"] etc
+    new_book = Book(**book_req.model_dump())
+    BOOKS.append(new_book)
+
+    return {"Added:": new_book}
