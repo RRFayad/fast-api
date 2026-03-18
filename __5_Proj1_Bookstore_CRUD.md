@@ -6,7 +6,7 @@
 #### Run Server
 
 source .venv/bin/activate
-python -m uvicorn books:app --reload
+python3 -m uvicorn books:app --reload
 url: http://127.0.0.1:8000/...
 
 \*If we run `url/docs` if shows a Swagger UI

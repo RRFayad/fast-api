@@ -14,7 +14,7 @@
   - python3 -m venv fastapienv
   - We need to activate it: source fastapienv/bin/activate
     - we can simply type deactivate
-  - pip inmstall fastapi
+  - pip install fastapi
 - pip install "uvicorn[standard]"
 
 #### Run Server
