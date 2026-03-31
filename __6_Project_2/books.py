@@ -1,5 +1,7 @@
-from fastapi import Body, FastAPI
-from pydantic import BaseModel
+from typing import Optional
+
+from fastapi import FastAPI
+from pydantic import BaseModel, Field
 
 app = FastAPI()
 
@@ -20,11 +22,11 @@ class Book:
 
 
 class BookRequest(BaseModel):
-    id: int
-    title: str
-    author: str
-    description: str
-    rating: int
+    id: Optional[int] = None
+    title: str = Field(min_length=3)
+    author: str = Field(min_length=1)
+    description: str = Field(min_length=1, max_length=100)
+    rating: int = Field(ge=1, le=5)
 
 
 BOOKS = [
@@ -39,6 +41,11 @@ BOOKS = [
 ]
 
 
+def insert_id_in_book(book: Book):
+    book.id = 1 if len(BOOKS) == 0 else BOOKS[-1].id + 1
+    return book
+
+
 @app.get("/books")
 def read_all_books():
     return BOOKS
@@ -50,6 +57,7 @@ def create_book(book_req: BookRequest):
 
     # ** unpack and pack key values, so new_book["id"] = book_req["id"] etc
     new_book = Book(**book_req.model_dump())
+    new_book = insert_id_in_book(new_book)
     BOOKS.append(new_book)
 
     return {"Added:": new_book}
