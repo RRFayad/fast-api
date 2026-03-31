@@ -46,6 +46,8 @@ class BookRequest(BaseModel):
       #...
 ```
 
+- We can also add model_config to create a more descriptive request in our Swagger docs
+
 ### Notes / Obs during course:
 
 - ternary operator:
