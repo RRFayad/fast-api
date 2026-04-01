@@ -63,6 +63,22 @@ def read_all_books():
     return BOOKS
 
 
+@app.get("/books/")
+def get_books_by_rating(rating: int):
+    books = [book for book in BOOKS if book.rating == rating]
+    if books:
+        return books
+    return {"error": "No books found with the specified rating"}
+
+
+@app.get("/books/{book_id}")
+def get_book_by_id(book_id: int):
+    for book in BOOKS:
+        if book.id == book_id:
+            return book
+    return {"error": "Book not found"}
+
+
 @app.post("/books")
 def create_book(book_req: BookRequest):
     # print(book_req ). # It shows that book_req is an instance of BookRequest;
