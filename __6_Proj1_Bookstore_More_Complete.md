@@ -64,6 +64,22 @@ def get_books_by_publish_year(publish_year: int = Query(ge=1900, le=2020)):
 
 ```
 
+#### Status Codes Overview
+
+- 1xx: Req Processing
+- 2xx: Success
+  - 200: Ok
+  - 201: Created
+  - 204: No Content (Usually a PUT - didnt create nor return)
+- 3xx - Frther action must be complete
+- 4xx - Client Errors
+  - 400: Bad Request
+  - 401: Unauthorized
+  - 404: Not FOund
+  - 422: Unprocessable Entity
+- 5xx - Server Side Errors
+  - 500: Internal server error
+
 ### Notes / Obs during course:
 
 - ternary operator:
