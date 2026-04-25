@@ -80,6 +80,17 @@ def get_books_by_publish_year(publish_year: int = Query(ge=1900, le=2020)):
 - 5xx - Server Side Errors
   - 500: Internal server error
 
+#### HTTP Exceptions
+
+```python
+  @app.get("/books/{book_id}")
+  def get_book_by_id(book_id: int = Path(gt=0)):
+    for book in BOOKS:
+        if book.id == book_id:
+            return book
+  raise HTTPException(status_code=404, detail="Book not found")
+```
+
 ### Notes / Obs during course:
 
 - ternary operator:
