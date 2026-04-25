@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Path, Query
 from pydantic import BaseModel, Field
 
 app = FastAPI()
@@ -74,8 +74,8 @@ def get_books_by_rating(rating: int):
     return {"error": "No books found with the specified rating"}
 
 
-@app.get("/books/publish_year/{publish_year}")
-def get_books_by_publish_year(publish_year: int):
+@app.get("/books/publish_year/")
+def get_books_by_publish_year(publish_year: int = Query(ge=1900, le=2020)):
     books = [book for book in BOOKS if book.publish_year == publish_year]
     if books:
         return books
@@ -83,7 +83,7 @@ def get_books_by_publish_year(publish_year: int):
 
 
 @app.get("/books/{book_id}")
-def get_book_by_id(book_id: int):
+def get_book_by_id(book_id: int = Path(gt=0)):
     for book in BOOKS:
         if book.id == book_id:
             return book

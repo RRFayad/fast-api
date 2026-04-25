@@ -46,7 +46,23 @@ class BookRequest(BaseModel):
       #...
 ```
 
-- We can also add model_config to create a more descriptive request in our Swagger docs
+- **Obs.: **We can also add model_config to create a more descriptive request in our Swagger docs
+
+#### Path Validation
+
+- We can use **Path** to validate the parameter (or it will automatically return an error) (or **Query** for query params)
+
+```python
+  @app.get("/books/{book_id}")
+  def get_book_by_id(book_id: int = Path(gt=0)):
+  # ...
+
+
+@app.get("/books/publish_year/")
+def get_books_by_publish_year(publish_year: int = Query(ge=1900, le=2020)):
+  # ...
+
+```
 
 ### Notes / Obs during course:
 
