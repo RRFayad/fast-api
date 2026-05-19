@@ -2,6 +2,7 @@ from typing import Optional
 
 from fastapi import FastAPI, Path, Query, HTTPException
 from pydantic import BaseModel, Field
+from starlette import status
 
 app = FastAPI()
 
@@ -61,12 +62,12 @@ def insert_id_in_book(book: Book):
     return book
 
 
-@app.get("/books")
+@app.get("/books", status_code=status.HTTP_200_OK)
 def read_all_books():
     return BOOKS
 
 
-@app.get("/books/rating/{rating}")
+@app.get("/books/rating/{rating}", status_code=status.HTTP_200_OK)
 def get_books_by_rating(rating: int):
     books = [book for book in BOOKS if book.rating == rating]
     if books:
@@ -74,15 +75,16 @@ def get_books_by_rating(rating: int):
     return {"error": "No books found with the specified rating"}
 
 
-@app.get("/books/publish_year/")
+@app.get("/books/publish_year/", status_code=status.HTTP_200_OK)
 def get_books_by_publish_year(publish_year: int = Query(ge=1900, le=2020)):
     books = [book for book in BOOKS if book.publish_year == publish_year]
     if books:
         return books
-    return {"error": "No books found with the specified publish year"}
+    raise HTTPException(
+        status_code=404, detail="No books found with the specified publish year")
 
 
-@app.get("/books/{book_id}")
+@app.get("/books/{book_id}", status_code=status.HTTP_200_OK)
 def get_book_by_id(book_id: int = Path(gt=0)):
     for book in BOOKS:
         if book.id == book_id:
@@ -90,7 +92,7 @@ def get_book_by_id(book_id: int = Path(gt=0)):
     raise HTTPException(status_code=404, detail="Book not found")
 
 
-@app.post("/books")
+@app.post("/books", status_code=status.HTTP_201_CREATED)
 def create_book(book_req: BookRequest):
     # print(book_req ). # It shows that book_req is an instance of BookRequest;
 
@@ -102,7 +104,7 @@ def create_book(book_req: BookRequest):
     return {"Added:": new_book}
 
 
-@app.put("/books/{book_id}")
+@app.put("/books/{book_id}", status_code=status.HTTP_204_NO_CONTENT)
 def update_book_by_id(book_req: BookRequest):
     for index in range(len(BOOKS)):
         if BOOKS[index].id == book_req.id:
@@ -116,7 +118,7 @@ def update_book_by_id(book_req: BookRequest):
     raise HTTPException(status_code=404, detail="Book not found")
 
 
-@app.delete("/books/{book_id}")
+@app.delete("/books/{book_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_book_by_id(book_id: int):
     for book in BOOKS:
         if book.id == book_id:

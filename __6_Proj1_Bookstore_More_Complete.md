@@ -9,7 +9,7 @@
 - Pydantics is for: Data Validation, data modeling, data aprsing, error handling
 
 - So the logic is:
-  - Create Pydantic Request Model (like Zod probably, whic could be translated to the Books class);
+  - Create Pydantic Request Model (like Zod, whic could be translated to the Books class);
   - Field data validation on each variable;
   - Convert the Pydantic object into the Book, after validation
 
@@ -79,6 +79,22 @@ def get_books_by_publish_year(publish_year: int = Query(ge=1900, le=2020)):
   - 422: Unprocessable Entity
 - 5xx - Server Side Errors
   - 500: Internal server error
+
+### Add HTTP Codes in the response
+
+```python
+  @app.get("/books", status_code=status.HTTP_200_OK)
+  def read_all_books():
+    return BOOKS
+
+  @app.delete("/books/{book_id}", status_code=status.HTTP_204_NO_CONTENT)
+    def delete_book_by_id(book_id: int):
+        for book in BOOKS:
+        if book.id == book_id:
+            BOOKS.remove(book)
+            return {"Deleted:": book}
+    raise HTTPException(status_code=404, detail="Book not found")
+```
 
 #### HTTP Exceptions
 
