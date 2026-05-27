@@ -83,6 +83,33 @@ def get_db():
     return db.query(Todos).all()
 ```
 
+### Add Routers
+
+- By adding routes, this is the main file:
+
+```python
+  app = FastAPI()
+
+  # Its ran only when there is no db
+  models.Base.metadata.create_all(bind=engine)
+
+  app.include_router(auth.router)
+  app.include_router(todos.router)
+```
+
+- And this it the `/routers/auth.py`:
+
+```python
+from fastapi import APIRouter
+
+router = APIRouter()
+
+
+@router.get("/auth")
+async def get_user():
+    pass
+```
+
 ### SQLAlchemy Notes / Syntax
 
 - select all:
@@ -114,3 +141,5 @@ def get_db():
 
 - limit results:
   `db.query(Todos).limit(5).all()`
+
+## Authentication
