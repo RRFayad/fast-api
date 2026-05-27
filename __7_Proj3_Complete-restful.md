@@ -60,6 +60,7 @@ Base = declarative_base()
   - Some mode examples: `column`, `markdown`, `box`, `table`
 
 - With the current setup, the database is stored in a .db file that can be opened with SQLite.
+  - `sqlite3 database.py`
 
 ### Start FastAPI
 
@@ -81,3 +82,35 @@ def get_db():
   def read_all(db: Annotated[Session, Depends(get_db)]): # Depends is a FastAPI Dependy Injection
     return db.query(Todos).all()
 ```
+
+### SQLAlchemy Notes / Syntax
+
+- select all:
+  `db.query(Todos).all()`
+
+- select first match:
+  `db.query(Todos).filter(Todos.id == id).first()`
+
+- filter multiple conditions:
+  `db.query(Todos).filter(Todos.complete == False, Todos.priority > 2).all()`
+
+- create item:
+  `db.add(todo)`
+
+- commit changes:
+  `db.commit()`
+
+- refresh object from DB:
+  `db.refresh(todo)`
+
+- update object:
+  `todo.title = "New title"`
+
+- delete object:
+  `db.delete(todo)`
+
+- order by:
+  `db.query(Todos).order_by(Todos.priority.desc()).all()`
+
+- limit results:
+  `db.query(Todos).limit(5).all()`
