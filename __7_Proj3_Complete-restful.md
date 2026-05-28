@@ -143,3 +143,6 @@ async def get_user():
   `db.query(Todos).limit(5).all()`
 
 ## Authentication
+
+- First we are going to create a Users Table, which will have One to Many Relationship with ToDos
+  - So in our ToDo app, each todo will have a owner FK (foreign key) which will reference an user
