@@ -49,7 +49,7 @@ def get_todo_by_id(db: db_dependency, id: int = Path(gt=0)):
 
 
 @router.post("/todo", status_code=status.HTTP_201_CREATED)
-def create_todo(db: db_dependency, todoReq: TodoReq = None):
+def create_todo(db: db_dependency, todoReq: TodoReq):
     if todoReq is not None:
         try:
             todo_model = Todos(
@@ -68,7 +68,11 @@ def create_todo(db: db_dependency, todoReq: TodoReq = None):
 
 
 @router.put("/todo/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def update_todo(db: db_dependency, id: int = Path(gt=0), todoReq: TodoReq = None):
+def update_todo(
+    db: db_dependency,
+    todoReq: TodoReq,
+    id: int = Path(gt=0),
+):
     todo_item = db.query(Todos).filter(Todos.id == id).first()
     if todo_item is not None:
         todo_item.title = todoReq.title

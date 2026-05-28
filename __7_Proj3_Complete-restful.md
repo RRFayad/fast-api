@@ -40,17 +40,19 @@ Base = declarative_base()
 ### Create Models
 
 - We can see, that as mentionen in step 3 above, all models are inherited from Base
+  - **Obs.:** Updated for the new SQLAlchemy way of doing, with strong type inference. So its different from the course
 
 ```python
-  class Todos(Base):
+class Todos(Base):
     __tablename__ = "todos"
 
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
     # Primary key = Unique Identifier; Index = auto generate indexing
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String)
-    description = Column(String)
-    priority = Column(Integer)
-    complete = Column(Boolean, default=False)
+    title: Mapped[str] = mapped_column()
+    description: Mapped[str] = mapped_column()
+    priority: Mapped[int] = mapped_column()
+    complete: Mapped[bool] = mapped_column(default=False)
+    owner: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
 ```
 
 ### SQLite

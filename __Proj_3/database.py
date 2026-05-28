@@ -1,12 +1,12 @@
 import os
+
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 load_dotenv()
 
-SQLALCHEMY_DB_URL = os.getenv("SQLALCHEMY_DATABASE_URL")
+SQLALCHEMY_DB_URL = os.getenv("SQLALCHEMY_DATABASE_URL") or ""
 
 # Creates the engine - how SQLAlchemy interacts with the DB
 engine = create_engine(SQLALCHEMY_DB_URL, connect_args={"check_same_thread": False})
