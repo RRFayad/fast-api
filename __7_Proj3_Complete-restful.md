@@ -151,3 +151,23 @@ async def get_user():
 
 - Hash Password with bcrypt:
   - `bcrypt.hashpw(b"create_user_req.password", bcrypt.gensalt(14))`
+
+- Install `python-multiform`
+  - Then we are going ot use `OAuth2PasswordRequestForm`, which has a default of values to be passed, with `username` and `password`
+
+- Add JWT Tokens:
+  - install `"python-jose[cryptography]`
+  - create and env secrect
+  - define algoright as `"HS256"`(believe its standard)
+
+- Basically, after we validated its the user:
+
+```python
+def create_access_token(username: str, user_id: int, expires_delta: timedelta):
+    if not JWT_SECRET_KEY:
+        raise ValueError("NO JWT_SECRET_KEY env var provided")
+    encode = {"sub": username, "id": user_id}
+    expires = datetime.now(timezone.utc)
+    encode.update({"exp": expires})
+    return jwt.encode(encode, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
+```
