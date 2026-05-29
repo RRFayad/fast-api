@@ -20,5 +20,5 @@
 #### Run Server
 
 source .venv/bin/activate
-python -m uvicorn books:app --reload
+python -m uvicorn main:app --reload
 url: http://127.0.0.1:8000/...

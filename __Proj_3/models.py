@@ -1,7 +1,7 @@
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
-from database import Base
+from .database import Base
 
 
 class Users(Base):
@@ -11,6 +11,7 @@ class Users(Base):
     email: Mapped[str] = mapped_column(unique=True)
     username: Mapped[str] = mapped_column(unique=True)
     first_name: Mapped[str] = mapped_column()
+    last_name: Mapped[str] = mapped_column()
     hashed_password: Mapped[str] = mapped_column()
     is_active: Mapped[bool] = mapped_column(default=True)
     role: Mapped[str] = mapped_column()

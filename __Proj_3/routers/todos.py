@@ -1,31 +1,11 @@
-from typing import Annotated
-
-from fastapi import APIRouter, Depends, HTTPException, Path
+from fastapi import APIRouter, HTTPException, Path
 from pydantic import BaseModel, Field
-from sqlalchemy.orm import Session
 from starlette import status
-from database import SessionLocal
-from models import Todos
+
+from ..dependencies import db_dependency
+from ..models import Todos
 
 router = APIRouter()
-
-
-def get_db():
-    """
-    This function manages the db lifecycle, by:
-    1. Creating a session;
-    2. Injecting it to the endpoint
-    3. Cleaning up after request finishes
-    """
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-# Depends is a FastAPI Dependency Injection - which means, determine this value by running the function when its called
-db_dependency = Annotated[Session, Depends(get_db)]
 
 
 class TodoReq(BaseModel):

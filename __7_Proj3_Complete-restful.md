@@ -8,6 +8,15 @@
   - Authorization
   - Hashing Passoword
 
+### SQLite
+
+- After installing SQLite, we can use it from the terminal.
+  - **Obs.:** To make the return more readable we can enter `.mode table` (table is the one I liked most)
+  - Some mode examples: `column`, `markdown`, `box`, `table`
+
+- With the current setup, the database is stored in a .db file that can be opened with SQLite.
+  - `sqlite3 database.py`
+
 ### Setup Dataabse
 
 - ![DB Table:](/__Proj_3/assets/todo_table.png)
@@ -54,15 +63,6 @@ class Todos(Base):
     complete: Mapped[bool] = mapped_column(default=False)
     owner: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
 ```
-
-### SQLite
-
-- After installing SQLite, we can use it from the terminal.
-  - **Obs.:** To make the return more readable we can enter `.mode table` (table is the one I liked most)
-  - Some mode examples: `column`, `markdown`, `box`, `table`
-
-- With the current setup, the database is stored in a .db file that can be opened with SQLite.
-  - `sqlite3 database.py`
 
 ### Start FastAPI
 
@@ -148,3 +148,6 @@ async def get_user():
 
 - First we are going to create a Users Table, which will have One to Many Relationship with ToDos
   - So in our ToDo app, each todo will have a owner FK (foreign key) which will reference an user
+
+- Hash Password with bcrypt:
+  - `bcrypt.hashpw(b"create_user_req.password", bcrypt.gensalt(14))`
