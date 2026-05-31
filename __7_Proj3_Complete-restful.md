@@ -173,3 +173,52 @@ def create_access_token(username: str, user_id: int, expires_delta: timedelta):
 ```
 
 - Then we decode the JWT for auth funcitons
+
+## Authorization
+
+- We created a user_dependency, and now we send this user_dependency to the API functions
+
+```python
+async def get_current_user_from_token(token: Annotated[str, Depends(oauth2_bearer)]):
+    try:
+        payload = jwt.decode(token, JWT_SECRET_KEY or "", algorithms=JWT_ALGORITHM)
+        username: str | None = payload.get("sub")
+        user_id: int | None = payload.get("id")
+        if username is None or user_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Could not validate credentials",
+            )
+        return {"username": username, "user_id": user_id}
+
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+        )
+
+  user_dependency = Annotated[dict, Depends(get_current_user_from_token)]
+```
+
+- Flow:
+  - SO we send a post req to tue `auth/token`, which returns the jwt token;
+  - So client store the jwt to be sent in the header of the request that needs authorizaation
+  - oauth2_bearer reads the token from the header;
+  - `get_current_user_from_token()` decodes and validates it.
+  - If valid, FastAPI injects the user data into the route via user_dependency.
+  - _Obs.:_ Swagger UI only helps store/send the token. The validation flow is handled by your backend code.
+
+- **Important:** So when I create the Front End:
+
+  ```javascript
+  const response = await fetch("http://backend-route/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      ...
+    }),
+  });
+  ```
