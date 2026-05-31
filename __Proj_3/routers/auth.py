@@ -3,14 +3,14 @@ import os
 import token
 
 import bcrypt
-from jose import jwt
+from jose import JWTError, jwt
 from starlette import status
 from typing import Annotated
 from dotenv import load_dotenv
 from pydantic import BaseModel
 from fastapi.params import Depends
 from fastapi import APIRouter, HTTPException
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from starlette.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
@@ -24,8 +24,9 @@ from ..models import Users
 load_dotenv()
 JWT_SECRET_KEY = os.getenv("SECRET_KEY")
 JWT_ALGORITHM = "HS256"
+oauth2_bearer = OAuth2PasswordBearer(tokenUrl="auth/token")
 
-router = APIRouter()
+router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 class CreateUserRequest(BaseModel):
@@ -63,7 +64,26 @@ def create_access_token(username: str, user_id: int, expires_delta: timedelta):
     return jwt.encode(encode, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
 
 
-@router.post("/auth", status_code=HTTP_201_CREATED)
+async def get_current_user_from_token(token: Annotated[str, Depends(oauth2_bearer)]):
+    try:
+        payload = jwt.decode(token, JWT_SECRET_KEY or "", algorithms=JWT_ALGORITHM)
+        username: str | None = payload.get("sub")
+        user_id: int | None = payload.get("id")
+        if username is None or user_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Could not validate credentials",
+            )
+
+        return {"username": username, "user_id": user_id}
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+        )
+
+
+@router.post("/", status_code=HTTP_201_CREATED)
 async def create_user(db: db_dependency, create_user_req: CreateUserRequest):
 
     user_model = Users(
@@ -84,7 +104,10 @@ async def create_user(db: db_dependency, create_user_req: CreateUserRequest):
         db.commit()
         db.refresh(user_model)
     except:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+        )
 
 
 @router.post("/token", response_model=Token)
@@ -94,6 +117,9 @@ async def login_for_access_token(
     user = authenticate_user(form_data.username, form_data.password, db)
 
     if not user:
-        return "Failed Authentication"
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+        )
     token = create_access_token(user.username, user.id, timedelta(minutes=60))
     return {"access_token": token, "token_type": "bearer"}

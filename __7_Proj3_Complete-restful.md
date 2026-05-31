@@ -171,3 +171,5 @@ def create_access_token(username: str, user_id: int, expires_delta: timedelta):
     encode.update({"exp": expires})
     return jwt.encode(encode, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
 ```
+
+- Then we decode the JWT for auth funcitons
