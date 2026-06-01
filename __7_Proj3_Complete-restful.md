@@ -222,3 +222,6 @@ async def get_current_user_from_token(token: Annotated[str, Depends(oauth2_beare
     }),
   });
   ```
+
+  ### Using Role for admin routes
+  - Basically, created `/admin` routes, and added the user role to the token, so if the user role is admin, he can access admin routes
