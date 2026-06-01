@@ -1,9 +1,7 @@
 from datetime import datetime, timedelta, timezone
 
-import token
-
 import bcrypt
-from jose import JWTError, jwt
+from jose import jwt
 from starlette import status
 from typing import Annotated
 
