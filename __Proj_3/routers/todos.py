@@ -23,16 +23,14 @@ class TodoReq(BaseModel):
 def read_all(user: user_dependency, db: db_dependency):
     if user is None:
         raise HTTPException(status_code=401, detail="Authentication failed")
-    return db.query(Todos).filter(Todos.owner == user.get("id")).all()
+    return db.query(Todos).filter(Todos.owner == user.id).all()
 
 
 @router.get("/{id}", status_code=status.HTTP_200_OK)
 def get_todo_by_id(user: user_dependency, db: db_dependency, id: int = Path(gt=0)):
     if user is None:
         raise HTTPException(status_code=401, detail="Authentication failed")
-    todo_item = (
-        db.query(Todos).filter(Todos.id == id, Todos.owner == user.get("id")).first()
-    )
+    todo_item = db.query(Todos).filter(Todos.id == id, Todos.owner == user.id).first()
     if todo_item is not None:
         return todo_item
     raise HTTPException(status_code=404, detail="Todo not found")
@@ -50,7 +48,7 @@ def create_todo(user: user_dependency, db: db_dependency, todoReq: TodoReq):
                 description=todoReq.description,
                 priority=todoReq.priority,
                 complete=todoReq.complete,
-                owner=user.get("id"),
+                owner=user.id,
             )
             db.add(todo_model)
             db.commit()
@@ -71,9 +69,7 @@ def update_todo(
 ):
     if user is None:
         raise HTTPException(status_code=401, detail="Authentication failed")
-    todo_item = (
-        db.query(Todos).filter(Todos.id == id, Todos.owner == user.get("id")).first()
-    )
+    todo_item = db.query(Todos).filter(Todos.id == id, Todos.owner == user.id).first()
     if todo_item is not None:
         todo_item.title = todoReq.title
         todo_item.description = todoReq.description
@@ -88,7 +84,7 @@ def update_todo(
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_todo(user: user_dependency, db: db_dependency, id: int = Path(gt=0)):
     to_be_deleted_item = (
-        db.query(Todos).filter(Todos.id == id, Todos.owner == user.get("id")).first()
+        db.query(Todos).filter(Todos.id == id, Todos.owner == user.id).first()
     )
     if to_be_deleted_item is None:
         raise HTTPException(status_code=404, detail="Todo not found")
