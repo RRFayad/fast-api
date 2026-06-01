@@ -104,7 +104,7 @@ def get_db():
 ```python
 from fastapi import APIRouter
 
-router = APIRouter()
+router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.get("/auth")
@@ -206,7 +206,7 @@ async def get_current_user_from_token(token: Annotated[str, Depends(oauth2_beare
   - oauth2_bearer reads the token from the header;
   - `get_current_user_from_token()` decodes and validates it.
   - If valid, FastAPI injects the user data into the route via user_dependency.
-  - _Obs.:_ Swagger UI only helps store/send the token. The validation flow is handled by your backend code.
+  - _Obs.:_ Swagger UI only helps store/send the token. The validation flow is totally handled by the backend code.
 
 - **Important:** So when I create the Front End:
 
