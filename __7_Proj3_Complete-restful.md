@@ -225,3 +225,20 @@ async def get_current_user_from_token(token: Annotated[str, Depends(oauth2_beare
 
   ### Using Role for admin routes
   - Basically, created `/admin` routes, and added the user role to the token, so if the user role is admin, he can access admin routes
+
+## Production Databases
+
+- DBMS vs SQLite
+  - SQLite:
+    - local
+    - great for small apps
+  - Productions DBMS:
+    - Larger scale;
+
+- Postgres:
+  - We created the tables in the Postgres
+  - As we created locally, we also used pogAdmin (Postgres UI)
+
+- COnnect the FastAPI to the DB:
+  - install `psycopg2-binary`
+  - Setupo env + db URLs
