@@ -44,3 +44,20 @@
           assert default_student.major == "CS"
           assert default_student.years == 3
     ```
+
+- For testing API:
+  - `pip install httpx`
+  - test api routes:
+
+    ```python
+        import __Proj_3.main as main
+        from fastapi.testclient import TestClient
+        from fastapi import status
+
+        client = TestClient(main.app)
+
+        def test_return_health_check():
+            response = client.get("/healthy")
+            assert response.status_code == status.HTTP_200_OK
+            assert response.json() == {"status": "Healthy"}
+    ```
