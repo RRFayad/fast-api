@@ -242,3 +242,45 @@ async def get_current_user_from_token(token: Annotated[str, Depends(oauth2_beare
 - COnnect the FastAPI to the DB:
   - install `psycopg2-binary`
   - Setupo env + db URLs
+
+## `Alembic and Data Migrations`
+
+- Alembic is a DB Migration tool, meaning that:
+  - allows us to transfer and upgrade tables
+  - As our project evolves, our DBs evolve, so Alembic helps us to keep evolving the DBs without risking losing data
+  - `pip install alembic`
+
+- Alembic commands:
+  - `alembic init <folder name>`: Initializes new generic environment
+  - `alembic revision -m <message>`: Creates a new revision environment
+  - `alembic upgrade <revision #>`: Run our upgrade migration to our DB
+  - `alembic downgrade -1`: Run our downgrade migration to our DB
+
+- Alembic Revision
+  - Alembic revision is how we create a new alembic file where we can add some type of db upgrade
+
+- Steps:
+  1. `alembic init alembic` (or other folder name)
+  2. In `env.py` file, add the env db url:
+  - Where we had `config = context.config`:
+
+    ```python
+    dotenv.load_dotenv()
+    # this is the Alembic Config object, which provides
+    # access to the values within the .ini file in use.
+    config = context.config
+    database_url = os.getenv("SQLALCHEMY_DATABASE_URL")
+
+    if database_url:
+    config.set_main_option("sqlalchemy.url", database_url)
+    ```
+  3. Add metadata: Look for the field in the file, and replace by `target_metadata = models.Base.metadata`
+  4. Create the scripts
+  - On terminal: `alembic revision -m "revisiong msg"`
+  - On the versions folder, we have a new file, with the current version id;
+  - We write our upgrade or downgrade function
+    - e.g.: `op.add_column("users", sa.Column("phone_number", sa.String(), nullable=True))`
+  - run (on terminal): `alembic upgrade <id>` (id from the version file)
+  5. Update API
+  - models
+  - CRUD operations
