@@ -278,8 +278,17 @@ async def get_current_user_from_token(token: Annotated[str, Depends(oauth2_beare
   4. Create the scripts
   - On terminal: `alembic revision -m "revisiong msg"`
   - On the versions folder, we have a new file, with the current version id;
-  - We write our upgrade or downgrade function
-    - e.g.: `op.add_column("users", sa.Column("phone_number", sa.String(), nullable=True))`
+  - We write our upgrade **and** downgrade function
+    - e.g.:
+
+      ```python
+      def upgrade() -> None:
+      op.add_column("users", sa.Column("phone_number", sa.String(), nullable=True))
+
+      def downgrade() -> None:
+      op.drop_column("users", "phone_number")
+      ```
+
   - run (on terminal): `alembic upgrade <id>` (id from the version file)
   5. Update API
   - models
